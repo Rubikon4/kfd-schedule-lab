@@ -11,9 +11,13 @@ sealed interface Session {
         override val date: LocalDate,
         override val topic: String,
         val place: String,
-        val teachers: MutableList<String>
+        teachersRaw: List<String>
     ) : Session {
-        init {
+        private val teachersPrivate: List<String> = teachersRaw.toList()
+        val teachers: List<String>
+            get() = teachersPrivate.toList()
+
+                init {
             if (date.year !in 1..9999) throw InvalidArgumentsException()
             validateRawInput(topic)
             validateRawInput(place)
@@ -26,8 +30,12 @@ sealed interface Session {
         override val date: LocalDate,
         override val topic: String,
         val place: String,
-        val teachers: MutableList<String>
+        teachersRaw: List<String>
     ) : Session {
+        private val teachersPrivate: List<String> = teachersRaw.toList()
+        val teachers: List<String>
+            get() = teachersPrivate.toList()
+
         init {
             if (date.year !in 1..9999) throw InvalidArgumentsException()
             validateRawInput(topic)
@@ -41,8 +49,12 @@ sealed interface Session {
         override val date: LocalDate,
         override val topic: String,
         val place: String,
-        val teachers: MutableList<String>
+        teachersRaw: List<String>
     ) : Session {
+        private val teachersPrivate: List<String> = teachersRaw.toList()
+        val teachers: List<String>
+            get() = teachersPrivate.toList()
+
         init {
             if (date.year !in 1..9999) throw InvalidArgumentsException()
             validateRawInput(topic)
