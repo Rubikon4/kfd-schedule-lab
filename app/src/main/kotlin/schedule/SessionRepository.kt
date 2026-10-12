@@ -23,11 +23,32 @@ object InMemorySessionRepository : SessionRepository  {
         return sessions
     }
 }
-/**
+
 class AuditedSessionRepository (
     private val delegate: SessionRepository
 ) : SessionRepository by delegate {
-    private val sessionSucceesAddOperatons: MutableMap<String, Session>
-    private val sessionsAddCount: Int
+    var addCount: Int = 0
+        private set
+
+    private val auditEventStorage: MutableList<AuditEvent> = mutableListOf()
+    val auditEvent
+        get() = auditEventStorage.toList()
+
+    override fun add(session: Session) {
+        delegate.add(session)
+        addCount++
+        auditEventStorage.add(AuditEvent(event = "add", countSessions = 1))
+    }
+
+    override fun addAll(sessions: List<Session>) {
+        delegate.addAll(sessions)
+        val count: Int = sessions.size
+        addCount += count
+        auditEventStorage.add(AuditEvent(event = "addAll", countSessions = count))
+    }
 }
-        */
+
+data class AuditEvent (
+    val event: String,
+    val countSessions: Int
+)
