@@ -22,6 +22,7 @@ sealed interface Session {
             validateRawInput(topic)
             validateRawInput(place)
             if (place == "-") throw InvalidArgumentsException()
+            if (teachersPrivate.isEmpty()) throw InvalidArgumentsException()
             validateRawTeacher(teachersPrivate)
         }
     }
@@ -41,6 +42,7 @@ sealed interface Session {
             validateRawInput(topic)
             validateRawInput(place)
             if (place == "-") throw InvalidArgumentsException()
+            if (teachersPrivate.isEmpty()) throw InvalidArgumentsException()
             validateRawTeacher(teachersPrivate)
         }
     }
@@ -60,6 +62,8 @@ sealed interface Session {
             validateRawInput(topic)
             validateRawInput(place)
             if (place == "-") throw InvalidArgumentsException()
+            if (teachersPrivate.size < 2) throw InvalidArgumentsException()
+
             validateRawTeacher(teachersPrivate)
         }
     }
