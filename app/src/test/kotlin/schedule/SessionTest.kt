@@ -27,7 +27,7 @@ class SessionTest {
     fun createLectureFailWithoutTopic() {
         val expectedDate = LocalDate.of(2026, 10, 13)
         val expectedTeachers = listOf("teacher", "teacher2")
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Lecture(
                 date = expectedDate,
                 topic = "",
@@ -35,13 +35,15 @@ class SessionTest {
                 teachersRaw = expectedTeachers,
             )
         }
+
+        assertEquals("topic must not be blank", exception.message)
     }
 
     @Test
     fun createLectureFailIncorrectDate() {
         val incorrectDate = LocalDate.of(10000, 10, 13)
         val expectedTeachers = listOf("teacher", "teacher2")
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Lecture(
                 date = incorrectDate,
                 topic = "topic",
@@ -49,6 +51,8 @@ class SessionTest {
                 teachersRaw = expectedTeachers,
             )
         }
+
+        assertEquals("date year must be between 1 and 9999", exception.message)
     }
 
     @Test
@@ -139,7 +143,7 @@ class SessionTest {
     @Test
     fun createLectureFailZeroYear() {
         val expectedDate = LocalDate.of(0, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Lecture(
                 date = expectedDate,
                 topic = "topic",
@@ -147,12 +151,14 @@ class SessionTest {
                 teachersRaw = listOf("teacher", "teacher2"),
             )
         }
+
+        assertEquals("date year must be between 1 and 9999", exception.message)
     }
 
     @Test
     fun createLectureFailWithoutTeachers() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Lecture(
                 date = expectedDate,
                 topic = "topic",
@@ -160,12 +166,14 @@ class SessionTest {
                 teachersRaw = emptyList(),
             )
         }
+
+        assertEquals("LECTURE requires at least 1 teacher", exception.message)
     }
 
     @Test
     fun createLectureFailBlankTopic() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Lecture(
                 date = expectedDate,
                 topic = "   ",
@@ -173,12 +181,14 @@ class SessionTest {
                 teachersRaw = listOf("teacher", "teacher2"),
             )
         }
+
+        assertEquals("topic must not be blank", exception.message)
     }
 
     @Test
     fun createLectureFailOuterSpaceTopic() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Lecture(
                 date = expectedDate,
                 topic = " topic ",
@@ -186,12 +196,14 @@ class SessionTest {
                 teachersRaw = listOf("teacher", "teacher2"),
             )
         }
+
+        assertEquals("topic must not have leading or trailing whitespace", exception.message)
     }
 
     @Test
     fun createLectureFailControlCharacterTopic() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Lecture(
                 date = expectedDate,
                 topic = "topic\tname",
@@ -199,12 +211,14 @@ class SessionTest {
                 teachersRaw = listOf("teacher", "teacher2"),
             )
         }
+
+        assertEquals("topic must not contain control characters", exception.message)
     }
 
     @Test
     fun createLectureFailWithoutPlace() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Lecture(
                 date = expectedDate,
                 topic = "topic",
@@ -212,12 +226,14 @@ class SessionTest {
                 teachersRaw = listOf("teacher", "teacher2"),
             )
         }
+
+        assertEquals("place must not be blank", exception.message)
     }
 
     @Test
     fun createLectureFailBlankPlace() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Lecture(
                 date = expectedDate,
                 topic = "topic",
@@ -225,12 +241,14 @@ class SessionTest {
                 teachersRaw = listOf("teacher", "teacher2"),
             )
         }
+
+        assertEquals("place must not be blank", exception.message)
     }
 
     @Test
     fun createLectureFailDashPlace() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Lecture(
                 date = expectedDate,
                 topic = "topic",
@@ -238,12 +256,14 @@ class SessionTest {
                 teachersRaw = listOf("teacher", "teacher2"),
             )
         }
+
+        assertEquals("place must not be '-'", exception.message)
     }
 
     @Test
     fun createLectureFailOuterSpacePlace() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Lecture(
                 date = expectedDate,
                 topic = "topic",
@@ -251,12 +271,14 @@ class SessionTest {
                 teachersRaw = listOf("teacher", "teacher2"),
             )
         }
+
+        assertEquals("place must not have leading or trailing whitespace", exception.message)
     }
 
     @Test
     fun createLectureFailControlCharacterPlace() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Lecture(
                 date = expectedDate,
                 topic = "topic",
@@ -264,12 +286,14 @@ class SessionTest {
                 teachersRaw = listOf("teacher", "teacher2"),
             )
         }
+
+        assertEquals("place must not contain control characters", exception.message)
     }
 
     @Test
     fun createLectureFailEmptyTeacher() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Lecture(
                 date = expectedDate,
                 topic = "topic",
@@ -277,12 +301,14 @@ class SessionTest {
                 teachersRaw = listOf("teacher", ""),
             )
         }
+
+        assertEquals("teacher 2 must not be blank", exception.message)
     }
 
     @Test
     fun createLectureFailBlankTeacher() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Lecture(
                 date = expectedDate,
                 topic = "topic",
@@ -290,12 +316,14 @@ class SessionTest {
                 teachersRaw = listOf("teacher", "   "),
             )
         }
+
+        assertEquals("teacher 2 must not be blank", exception.message)
     }
 
     @Test
     fun createLectureFailDashTeacher() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Lecture(
                 date = expectedDate,
                 topic = "topic",
@@ -303,12 +331,14 @@ class SessionTest {
                 teachersRaw = listOf("teacher", "-"),
             )
         }
+
+        assertEquals("teacher 2 must not be '-'", exception.message)
     }
 
     @Test
     fun createLectureFailOuterSpaceTeacher() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Lecture(
                 date = expectedDate,
                 topic = "topic",
@@ -316,12 +346,14 @@ class SessionTest {
                 teachersRaw = listOf("teacher", " teacher2"),
             )
         }
+
+        assertEquals("teacher 2 must not have leading or trailing whitespace", exception.message)
     }
 
     @Test
     fun createLectureFailControlCharacterTeacher() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Lecture(
                 date = expectedDate,
                 topic = "topic",
@@ -329,12 +361,14 @@ class SessionTest {
                 teachersRaw = listOf("teacher", "teacher\nname"),
             )
         }
+
+        assertEquals("teacher 2 must not contain control characters", exception.message)
     }
 
     @Test
     fun createLectureFailTwinTeachers() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Lecture(
                 date = expectedDate,
                 topic = "topic",
@@ -342,6 +376,8 @@ class SessionTest {
                 teachersRaw = listOf("teacher", "teacher"),
             )
         }
+
+        assertEquals("teacher names must be unique", exception.message)
     }
 
     @Test
@@ -429,7 +465,7 @@ class SessionTest {
     @Test
     fun createPracticeFailZeroYear() {
         val incorrectDate = LocalDate.of(0, 1, 1)
-        assertFailsWith<InvalidArgumentsException> {
+        assertFailsWith<IllegalArgumentException> {
             Session.Practice(
                 date = incorrectDate,
                 topic = "topic",
@@ -442,7 +478,7 @@ class SessionTest {
     @Test
     fun createPracticeFailWithoutTeachers() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Practice(
                 date = expectedDate,
                 topic = "topic",
@@ -450,12 +486,14 @@ class SessionTest {
                 teachersRaw = emptyList(),
             )
         }
+
+        assertEquals("PRACTICE requires at least 1 teacher", exception.message)
     }
 
     @Test
     fun createPracticeFailWithoutTopic() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        assertFailsWith<IllegalArgumentException> {
             Session.Practice(
                 date = expectedDate,
                 topic = "",
@@ -468,7 +506,7 @@ class SessionTest {
     @Test
     fun createPracticeFailIncorrectDate() {
         val expectedDate = LocalDate.of(10000, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        assertFailsWith<IllegalArgumentException> {
             Session.Practice(
                 date = expectedDate,
                 topic = "topic",
@@ -521,7 +559,7 @@ class SessionTest {
     fun createExamFailInsufficientTeachers() {
         val expectedDate = LocalDate.of(2026, 10, 13)
         val incorrectTeachers = listOf("teacher")
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Exam(
                 date = expectedDate,
                 topic = "topic",
@@ -529,13 +567,15 @@ class SessionTest {
                 teachersRaw = incorrectTeachers,
             )
         }
+
+        assertEquals("EXAM requires at least 2 teachers", exception.message)
     }
 
     @Test
     fun createExamFailTwinTeachers() {
         val expectedDate = LocalDate.of(2026, 10, 13)
         val incorrectTeachers = listOf("teacher", "teacher")
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Exam(
                 date = expectedDate,
                 topic = "topic",
@@ -543,6 +583,8 @@ class SessionTest {
                 teachersRaw = incorrectTeachers,
             )
         }
+
+        assertEquals("teacher names must be unique", exception.message)
     }
 
     @Test
@@ -608,7 +650,7 @@ class SessionTest {
     @Test
     fun createExamFailZeroYear() {
         val incorrectDate = LocalDate.of(0, 1, 1)
-        assertFailsWith<InvalidArgumentsException> {
+        assertFailsWith<IllegalArgumentException> {
             Session.Exam(
                 date = incorrectDate,
                 topic = "topic",
@@ -621,7 +663,7 @@ class SessionTest {
     @Test
     fun createExamFailWithoutTeachers() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Exam(
                 date = expectedDate,
                 topic = "topic",
@@ -629,12 +671,14 @@ class SessionTest {
                 teachersRaw = emptyList(),
             )
         }
+
+        assertEquals("EXAM requires at least 2 teachers", exception.message)
     }
 
     @Test
     fun createExamFailWithoutTopic() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        assertFailsWith<IllegalArgumentException> {
             Session.Exam(
                 date = expectedDate,
                 topic = "",
@@ -647,7 +691,7 @@ class SessionTest {
     @Test
     fun createExamFailIncorrectDate() {
         val expectedDate = LocalDate.of(10000, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        assertFailsWith<IllegalArgumentException> {
             Session.Exam(
                 date = expectedDate,
                 topic = "topic",
@@ -725,7 +769,7 @@ class SessionTest {
     @Test
     fun createCancelFailZeroYear() {
         val incorrectDate = LocalDate.of(0, 1, 1)
-        assertFailsWith<InvalidArgumentsException> {
+        assertFailsWith<IllegalArgumentException> {
             Session.Cancel(date = incorrectDate, topic = "topic")
         }
     }
@@ -733,18 +777,20 @@ class SessionTest {
     @Test
     fun createCancelFailWithoutTopic() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        val exception = assertFailsWith<IllegalArgumentException> {
             Session.Cancel(
                 date = expectedDate,
                 topic = "",
             )
         }
+
+        assertEquals("topic must not be blank", exception.message)
     }
 
     @Test
     fun createCancelFailIncorrectDate() {
         val expectedDate = LocalDate.of(10000, 10, 13)
-        assertFailsWith<InvalidArgumentsException> {
+        assertFailsWith<IllegalArgumentException> {
             Session.Cancel(
                 date = expectedDate,
                 topic = "topic",
