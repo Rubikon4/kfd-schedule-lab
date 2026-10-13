@@ -17,12 +17,12 @@ sealed interface Session {
         val teachers: List<String>
             get() = teachersPrivate.toList()
 
-                init {
-            if (date.year !in 1..9999) throw InvalidArgumentsException()
-            validateRawInput(topic)
-            validateRawInput(place)
-            if (place == "-") throw InvalidArgumentsException()
-            if (teachersPrivate.isEmpty()) throw InvalidArgumentsException()
+        init {
+            if (date.year !in 1..9999) throw IllegalArgumentException("date year must be between 1 and 9999")
+            validateRawInput(topic, "topic")
+            validateRawInput(place, "place")
+            if (place == "-") throw IllegalArgumentException("place must not be '-'")
+            if (teachersPrivate.isEmpty()) throw IllegalArgumentException("LECTURE requires at least 1 teacher")
             validateRawTeacher(teachersPrivate)
         }
     }
@@ -38,11 +38,11 @@ sealed interface Session {
             get() = teachersPrivate.toList()
 
         init {
-            if (date.year !in 1..9999) throw InvalidArgumentsException()
-            validateRawInput(topic)
-            validateRawInput(place)
-            if (place == "-") throw InvalidArgumentsException()
-            if (teachersPrivate.isEmpty()) throw InvalidArgumentsException()
+            if (date.year !in 1..9999) throw IllegalArgumentException("date year must be between 1 and 9999")
+            validateRawInput(topic, "topic")
+            validateRawInput(place, "place")
+            if (place == "-") throw IllegalArgumentException("place must not be '-'")
+            if (teachersPrivate.isEmpty()) throw IllegalArgumentException("PRACTICE requires at least 1 teacher")
             validateRawTeacher(teachersPrivate)
         }
     }
@@ -58,11 +58,11 @@ sealed interface Session {
             get() = teachersPrivate.toList()
 
         init {
-            if (date.year !in 1..9999) throw InvalidArgumentsException()
-            validateRawInput(topic)
-            validateRawInput(place)
-            if (place == "-") throw InvalidArgumentsException()
-            if (teachersPrivate.size < 2) throw InvalidArgumentsException()
+            if (date.year !in 1..9999) throw IllegalArgumentException("date year must be between 1 and 9999")
+            validateRawInput(topic, "topic")
+            validateRawInput(place, "place")
+            if (place == "-") throw IllegalArgumentException("place must not be '-'")
+            if (teachersPrivate.size < 2) throw IllegalArgumentException("EXAM requires at least 2 teachers")
 
             validateRawTeacher(teachersPrivate)
         }
@@ -73,25 +73,27 @@ sealed interface Session {
         override val topic: String
     ) : Session {
         init {
-            if (date.year !in 1..9999) throw InvalidArgumentsException()
-            validateRawInput(topic)
+            if (date.year !in 1..9999) throw IllegalArgumentException("date year must be between 1 and 9999")
+            validateRawInput(topic, "topic")
         }
     }
 }
 
-fun validateRawInput(input: String) {
-    if (
-        input.isBlank() ||
-        input != input.trim() ||
-        input.any { symbol -> Character.isISOControl(symbol.code) }
-    ) throw InvalidArgumentsException()
-
+fun validateRawInput(input: String, fieldName: String = "value") {
+    if (input.isBlank()) throw IllegalArgumentException("$fieldName must not be blank")
+    if (input != input.trim()) {
+        throw IllegalArgumentException("$fieldName must not have leading or trailing whitespace")
+    }
+    if (input.any { symbol -> Character.isISOControl(symbol.code) }) {
+        throw IllegalArgumentException("$fieldName must not contain control characters")
+    }
 }
 
 fun validateRawTeacher(list: List<String>) {
-    if (list.size != list.distinct().size) throw InvalidArgumentsException()
-    for (name in list) {
-        validateRawInput(name)
-        if (name == "-") throw InvalidArgumentsException()
+    if (list.size != list.distinct().size) throw IllegalArgumentException("teacher names must be unique")
+    for ((index, name) in list.withIndex()) {
+        val fieldName = "teacher ${index + 1}"
+        validateRawInput(name, fieldName)
+        if (name == "-") throw IllegalArgumentException("$fieldName must not be '-'")
     }
 }
