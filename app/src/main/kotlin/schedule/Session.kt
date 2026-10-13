@@ -68,7 +68,7 @@ sealed interface Session {
         }
     }
 
-    class Cancel(
+    class Canceled(
         override val date: LocalDate,
         override val topic: String
     ) : Session {
@@ -84,7 +84,7 @@ fun validateRawInput(input: String, fieldName: String = "value") {
     if (input != input.trim()) {
         throw IllegalArgumentException("$fieldName must not have leading or trailing whitespace")
     }
-    if (input.any { symbol -> Character.isISOControl(symbol.code) }) {
+    if (input.any { symbol -> Character.isISOControl(symbol.code) }) { // проверяет ли isISOControl /n?
         throw IllegalArgumentException("$fieldName must not contain control characters")
     }
 }

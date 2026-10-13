@@ -741,7 +741,7 @@ class SessionTest {
     }    @Test
     fun createCancelSuccess() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        val session = Session.Cancel(
+        val session = Session.Canceled(
             date = expectedDate,
             topic = "topic",
         )
@@ -753,7 +753,7 @@ class SessionTest {
     @Test
     fun createCancelSuccessMinimumYear() {
         val expectedDate = LocalDate.of(1, 1, 1)
-        val session = Session.Cancel(date = expectedDate, topic = "topic")
+        val session = Session.Canceled(date = expectedDate, topic = "topic")
 
         assertEquals(1, session.date.year)
     }
@@ -761,7 +761,7 @@ class SessionTest {
     @Test
     fun createCancelSuccessMaximumYear() {
         val expectedDate = LocalDate.of(9999, 12, 31)
-        val session = Session.Cancel(date = expectedDate, topic = "topic")
+        val session = Session.Canceled(date = expectedDate, topic = "topic")
 
         assertEquals(9999, session.date.year)
     }
@@ -770,7 +770,7 @@ class SessionTest {
     fun createCancelFailZeroYear() {
         val incorrectDate = LocalDate.of(0, 1, 1)
         assertFailsWith<IllegalArgumentException> {
-            Session.Cancel(date = incorrectDate, topic = "topic")
+            Session.Canceled(date = incorrectDate, topic = "topic")
         }
     }
 
@@ -778,7 +778,7 @@ class SessionTest {
     fun createCancelFailWithoutTopic() {
         val expectedDate = LocalDate.of(2026, 10, 13)
         val exception = assertFailsWith<IllegalArgumentException> {
-            Session.Cancel(
+            Session.Canceled(
                 date = expectedDate,
                 topic = "",
             )
@@ -791,7 +791,7 @@ class SessionTest {
     fun createCancelFailIncorrectDate() {
         val expectedDate = LocalDate.of(10000, 10, 13)
         assertFailsWith<IllegalArgumentException> {
-            Session.Cancel(
+            Session.Canceled(
                 date = expectedDate,
                 topic = "topic",
             )

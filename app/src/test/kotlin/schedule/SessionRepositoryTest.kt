@@ -9,7 +9,7 @@ class SessionRepositoryTest {
     @Test
     fun addSessionSuccess() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        val session = Session.Cancel(date = expectedDate, topic = "topic")
+        val session = Session.Canceled(date = expectedDate, topic = "topic")
         val repository = InMemorySessionRepository
         val originalSessions = repository.all()
 
@@ -21,8 +21,8 @@ class SessionRepositoryTest {
     @Test
     fun addAllSessionsSuccessKeepOrderAndDuplicates() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        val firstSession = Session.Cancel(date = expectedDate, topic = "first topic")
-        val secondSession = Session.Cancel(date = expectedDate, topic = "second topic")
+        val firstSession = Session.Canceled(date = expectedDate, topic = "first topic")
+        val secondSession = Session.Canceled(date = expectedDate, topic = "second topic")
         val expectedSessions = listOf(secondSession, firstSession, secondSession)
         val repository = InMemorySessionRepository
         val originalSessions = repository.all()
@@ -45,7 +45,7 @@ class SessionRepositoryTest {
     @Test
     fun changeOriginalSessionsWithoutChangingRepository() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        val session = Session.Cancel(date = expectedDate, topic = "topic")
+        val session = Session.Canceled(date = expectedDate, topic = "topic")
         val sessions = mutableListOf<Session>(session, session)
         val repository = InMemorySessionRepository
         val originalSessions = repository.all()
@@ -59,7 +59,7 @@ class SessionRepositoryTest {
     @Test
     fun addSessionWithoutChangingOldSnapshot() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        val session = Session.Cancel(date = expectedDate, topic = "topic")
+        val session = Session.Canceled(date = expectedDate, topic = "topic")
         val repository = InMemorySessionRepository
         val snapshot = repository.all()
         val expectedSessions = snapshot.toList()
@@ -73,7 +73,7 @@ class SessionRepositoryTest {
     @Test
     fun changeSnapshotWithoutChangingRepository() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        val session = Session.Cancel(date = expectedDate, topic = "topic")
+        val session = Session.Canceled(date = expectedDate, topic = "topic")
         val repository = InMemorySessionRepository
         repository.addAll(listOf(session, session))
         val expectedSessions = repository.all().toList()
@@ -92,7 +92,7 @@ class SessionRepositoryTest {
     @Test
     fun auditedAddSessionSuccess() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        val session = Session.Cancel(date = expectedDate, topic = "topic")
+        val session = Session.Canceled(date = expectedDate, topic = "topic")
         val delegate = InMemorySessionRepository
         val originalSessions = delegate.all()
         val repository = AuditedSessionRepository(delegate)
@@ -108,8 +108,8 @@ class SessionRepositoryTest {
     @Test
     fun auditedAddAllSessionsSuccess() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        val firstSession = Session.Cancel(date = expectedDate, topic = "first topic")
-        val secondSession = Session.Cancel(date = expectedDate, topic = "second topic")
+        val firstSession = Session.Canceled(date = expectedDate, topic = "first topic")
+        val secondSession = Session.Canceled(date = expectedDate, topic = "second topic")
         val expectedSessions = listOf(firstSession, secondSession, firstSession)
         val delegate = InMemorySessionRepository
         val originalSessions = delegate.all()
@@ -138,7 +138,7 @@ class SessionRepositoryTest {
     @Test
     fun auditedAddAndAddAllSuccessKeepEventOrder() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        val session = Session.Cancel(date = expectedDate, topic = "topic")
+        val session = Session.Canceled(date = expectedDate, topic = "topic")
         val repository = AuditedSessionRepository(InMemorySessionRepository)
 
         repository.add(session)
@@ -161,7 +161,7 @@ class SessionRepositoryTest {
     @Test
     fun auditedAllWithoutAddingEvents() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        val session = Session.Cancel(date = expectedDate, topic = "topic")
+        val session = Session.Canceled(date = expectedDate, topic = "topic")
         val repository = AuditedSessionRepository(InMemorySessionRepository)
         repository.add(session)
         val expectedEvents = repository.auditEvent
@@ -176,7 +176,7 @@ class SessionRepositoryTest {
     @Test
     fun auditedAddWithoutChangingOldEventSnapshot() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        val session = Session.Cancel(date = expectedDate, topic = "topic")
+        val session = Session.Canceled(date = expectedDate, topic = "topic")
         val repository = AuditedSessionRepository(InMemorySessionRepository)
         repository.add(session)
         val snapshot = repository.auditEvent
@@ -190,7 +190,7 @@ class SessionRepositoryTest {
     @Test
     fun changeReturnedEventsWithoutChangingAuditJournal() {
         val expectedDate = LocalDate.of(2026, 10, 13)
-        val session = Session.Cancel(date = expectedDate, topic = "topic")
+        val session = Session.Canceled(date = expectedDate, topic = "topic")
         val repository = AuditedSessionRepository(InMemorySessionRepository)
         repository.add(session)
         repository.add(session)
@@ -222,7 +222,7 @@ class SessionRepositoryTest {
             override fun all(): List<Session> = emptyList()
         }
         val expectedDate = LocalDate.of(2026, 10, 13)
-        val session = Session.Cancel(date = expectedDate, topic = "topic")
+        val session = Session.Canceled(date = expectedDate, topic = "topic")
         val repository = AuditedSessionRepository(delegate)
 
         assertFailsWith<IllegalStateException> {
