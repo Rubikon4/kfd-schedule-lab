@@ -13,9 +13,9 @@ sealed interface Session {
         val place: String,
         teachersRaw: List<String>
     ) : Session {
-        private val teachersPrivate: List<String> = teachersRaw.toList()
+        private val teachersPrivate: List<String> = java.util.List.copyOf(teachersRaw)
         val teachers: List<String>
-            get() = teachersPrivate.toList()
+            get() = teachersPrivate
 
         init {
             if (date.year !in 1..9999) throw IllegalArgumentException("date year must be between 1 and 9999")
@@ -33,9 +33,9 @@ sealed interface Session {
         val place: String,
         teachersRaw: List<String>
     ) : Session {
-        private val teachersPrivate: List<String> = teachersRaw.toList()
+        private val teachersPrivate: List<String> = java.util.List.copyOf(teachersRaw)
         val teachers: List<String>
-            get() = teachersPrivate.toList()
+            get() = teachersPrivate
 
         init {
             if (date.year !in 1..9999) throw IllegalArgumentException("date year must be between 1 and 9999")
@@ -53,9 +53,9 @@ sealed interface Session {
         val place: String,
         teachersRaw: List<String>
     ) : Session {
-        private val teachersPrivate: List<String> = teachersRaw.toList()
+        private val teachersPrivate: List<String> = java.util.List.copyOf(teachersRaw)
         val teachers: List<String>
-            get() = teachersPrivate.toList()
+            get() = teachersPrivate
 
         init {
             if (date.year !in 1..9999) throw IllegalArgumentException("date year must be between 1 and 9999")
