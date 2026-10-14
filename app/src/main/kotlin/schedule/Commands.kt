@@ -27,8 +27,21 @@ fun runType(command: Command.ByType): Int {
 }
 
 fun runErrors(command: Command.Errors): Int {
-    // TODO: parse every line of command.file, print formatted rejections
-    // and Rejected: K of M, return 0 or 1.
-    println("Not implemented: errors")
-    return 2
+    val parser = ScheduleLineParser()
+    var totalLines = 0L
+    var rejectedLines = 0L
+
+    forEachScheduleLine(command.file) { number, line ->
+        totalLines++
+        when (val result = parser.scheduleParseLine(number, line)) {
+            is CorrectLine -> Unit
+            is IncorrectLine -> {
+                rejectedLines++
+                println(formatLineError(result))
+            }
+        }
+    }
+
+    println("Rejected: $rejectedLines of $totalLines")
+    return if (rejectedLines == 0L) 0 else 1
 }
