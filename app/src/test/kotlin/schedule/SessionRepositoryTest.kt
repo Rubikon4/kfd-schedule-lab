@@ -209,6 +209,35 @@ class SessionRepositoryTest {
     }
 
     @Test
+    fun auditedAddAllWithoutDoubleLoggingFromDelegateAdd() {
+        var delegateAddCalls = 0
+        val delegate = object : SessionRepository {
+            private val sessions = mutableListOf<Session>()
+
+            override fun add(session: Session) {
+                delegateAddCalls++
+                sessions.add(session)
+            }
+
+            override fun addAll(sessions: List<Session>) {
+                for (session in sessions) add(session)
+            }
+
+            override fun all(): List<Session> = sessions.toList()
+        }
+        val expectedDate = LocalDate.of(2026, 10, 13)
+        val session = Session.Canceled(date = expectedDate, topic = "topic")
+        val repository = AuditedSessionRepository(delegate)
+
+        repository.addAll(listOf(session, session))
+
+        assertEquals(2, delegateAddCalls)
+        assertEquals(listOf(session, session), repository.all())
+        assertEquals(2, repository.addCount)
+        assertEquals(listOf(AuditEvent(event = "addAll", countSessions = 2)), repository.auditEvent)
+    }
+
+    @Test
     fun auditedFailedOperationsWithoutAddingEvents() {
         val delegate = object : SessionRepository {
             override fun add(session: Session) {
