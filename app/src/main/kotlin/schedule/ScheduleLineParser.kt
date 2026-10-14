@@ -8,18 +8,18 @@ class ScheduleLineParser {
     private val datePattern = Regex("[0-9]{4}-[0-9]{2}-[0-9]{2}")
 
     fun scheduleParseLine(currentLineNumber: Long, line: String): LineParseResult {
-        val fields = line.split('|')
-        val topic = fields[2]
-        val location = fields[3]
-        val teachers = fields[4].split(',')
-
         if (!line.contains('|')) {
             return IncorrectLine(lineNumber = currentLineNumber, invalidReason = InvalidFieldSeparator)
         }
 
+        val fields = line.split('|')
         if (fields.size != 5) {
             return IncorrectLine(currentLineNumber, InvalidFieldCount(fields.size))
         }
+
+        val topic = fields[2]
+        val location = fields[3]
+        val teachers = fields[4].split(',')
 
         for ((index, value) in fields.withIndex()) {
             if (value.isBlank()) {
