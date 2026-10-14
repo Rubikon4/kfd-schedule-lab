@@ -41,10 +41,37 @@ fun runPeriod(command: Command.Period): Int {
 }
 
 fun runType(command: Command.ByType): Int {
-    // TODO: parse every line of command.file, filter by command.type,
-    // print the selected sessions with teachers and Total, return 0 or 1.
-    println("Not implemented: type")
-    return 2
+    val parser = ScheduleLineParser()
+    var selectedSessions = 0L
+    var rejectedLines = 0L
+
+    forEachScheduleLine(command.file) { number, line ->
+        when (val result = parser.scheduleParseLine(number, line)) {
+            is IncorrectLine -> rejectedLines++
+            is CorrectLine -> {
+                val session = result.session
+                val type = when (session) {
+                    is Session.Lecture -> SessionType.LECTURE
+                    is Session.Practice -> SessionType.PRACTICE
+                    is Session.Exam -> SessionType.EXAM
+                    is Session.Canceled -> SessionType.CANCELLED
+                }
+                if (type == command.type) {
+                    val details = when (session) {
+                        is Session.Lecture -> "${session.place} | ${session.teachers.joinToString(", ")}"
+                        is Session.Practice -> "${session.place} | ${session.teachers.joinToString(", ")}"
+                        is Session.Exam -> "${session.place} | ${session.teachers.joinToString(", ")}"
+                        is Session.Canceled -> "- | -"
+                    }
+                    println("${session.date} | ${type.name} | ${session.topic} | $details")
+                    selectedSessions++
+                }
+            }
+        }
+    }
+
+    println("Total: $selectedSessions")
+    return if (rejectedLines == 0L) 0 else 1
 }
 
 fun runErrors(command: Command.Errors): Int {
