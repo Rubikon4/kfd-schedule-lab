@@ -1,0 +1,10 @@
+0001-01-01|LECTURE|First year|Room 1|Ivanov
+9999-12-31|PRACTICE|Last year|Room 2|Petrov
+2026-10-31|EXAM|Exam at end|Room 3|Petrov,Ivanov
+2026-10-01|LECTURE|Lecture at start|Room 1|Ivanov
+2026-10-15|CANCELLED|Cancelled|-|-
+2026-11-05|LECTURE|Outside invalid|-|Ivanov
+2026-10-05|EXAM|Duplicate teachers|Room 3|Ivanov,Ivanov
+2026-13-45|SEMINAR|Invalid date first|Room 1|Ivanov
+2026-10-05|PRACTICE|Trailing empty teacher|Room 2|Petrov,
+2026-10-05|LECTURE|Empty teachers|Room 1|

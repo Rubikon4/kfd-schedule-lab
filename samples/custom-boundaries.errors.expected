@@ -1,0 +1,6 @@
+line 6: invalid location "-"
+line 7: duplicate teacher 2 "Ivanov"
+line 8: invalid date "2026-13-45"
+line 9: invalid teacher 2 ""
+line 10: empty required field "teachers"
+Rejected: 5 of 10
