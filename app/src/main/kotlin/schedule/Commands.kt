@@ -13,10 +13,31 @@ object StudentCommandHandlers : CommandHandlers {
 }
 
 fun runPeriod(command: Command.Period): Int {
-    // TODO: parse every line of command.file, filter by command.from..command.to,
-    // print the selected sessions and Total, return 0 or 1.
-    println("Not implemented: period")
-    return 2
+    val parser = ScheduleLineParser()
+    var selectedSessions = 0L
+    var rejectedLines = 0L
+
+    forEachScheduleLine(command.file) { number, line ->
+        when (val result = parser.scheduleParseLine(number, line)) {
+            is IncorrectLine -> rejectedLines++
+            is CorrectLine -> {
+                val session = result.session
+                if (session.date >= command.from && session.date <= command.to) {
+                    val fields = when (session) {
+                        is Session.Lecture -> "LECTURE | ${session.topic} | ${session.place}"
+                        is Session.Practice -> "PRACTICE | ${session.topic} | ${session.place}"
+                        is Session.Exam -> "EXAM | ${session.topic} | ${session.place}"
+                        is Session.Canceled -> "CANCELLED | ${session.topic} | -"
+                    }
+                    println("${session.date} | $fields")
+                    selectedSessions++
+                }
+            }
+        }
+    }
+
+    println("Total: $selectedSessions")
+    return if (rejectedLines == 0L) 0 else 1
 }
 
 fun runType(command: Command.ByType): Int {
