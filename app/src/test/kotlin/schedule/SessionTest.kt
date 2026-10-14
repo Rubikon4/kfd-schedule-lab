@@ -408,14 +408,12 @@ class SessionTest {
             teachersRaw = expectedTeachers,
         )
 
-        val returnedTeachers = session.teachers as? MutableList<String>
-        if (returnedTeachers != null) {
-            try {
-                returnedTeachers.clear()
-            } catch (_: UnsupportedOperationException) {
-            }
+        val returnedTeachers = session.teachers as MutableList<String>
+        assertFailsWith<UnsupportedOperationException> {
+            returnedTeachers.clear()
         }
 
+        assertEquals(expectedTeachers, returnedTeachers)
         assertEquals(expectedTeachers, session.teachers)
     }
 
@@ -544,14 +542,12 @@ class SessionTest {
             teachersRaw = expectedTeachers,
         )
 
-        val returnedTeachers = session.teachers as? MutableList<String>
-        if (returnedTeachers != null) {
-            try {
-                returnedTeachers.clear()
-            } catch (_: UnsupportedOperationException) {
-            }
+        val returnedTeachers = session.teachers as MutableList<String>
+        assertFailsWith<UnsupportedOperationException> {
+            returnedTeachers.clear()
         }
 
+        assertEquals(expectedTeachers, returnedTeachers)
         assertEquals(expectedTeachers, session.teachers)
     }
 
@@ -729,14 +725,12 @@ class SessionTest {
             teachersRaw = expectedTeachers,
         )
 
-        val returnedTeachers = session.teachers as? MutableList<String>
-        if (returnedTeachers != null) {
-            try {
-                returnedTeachers.clear()
-            } catch (_: UnsupportedOperationException) {
-            }
+        val returnedTeachers = session.teachers as MutableList<String>
+        assertFailsWith<UnsupportedOperationException> {
+            returnedTeachers.clear()
         }
 
+        assertEquals(expectedTeachers, returnedTeachers)
         assertEquals(expectedTeachers, session.teachers)
     }    @Test
     fun createCancelSuccess() {
